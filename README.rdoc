@@ -1,0 +1,21 @@
+= Scopes for Associations
+
+== Description
+
+Define very basic, commonly used scopes for ActiveRecord associations.
+
+== Description through code
+
+  class Movie < ActiveRecord::Base
+    belongs_to :director
+    scopes_for_associations
+  end
+  
+  Movie.for_director(Director.first)
+  #=> [#<Movie ..., director_id: 1>]
+  Movie.for(Director.first)
+  #=> [#<Movie ..., director_id: 1>]
+
+== Limitations
+
+As of now, the gem only defines scopes for non-polymorphic belongs_to associations.
