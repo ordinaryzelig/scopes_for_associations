@@ -13,4 +13,7 @@ ActiveRecord::Schema.define do
     t.belongs_to :director
     t.belongs_to :production_company
   end
+  create_table :comments, :force => true do |t|
+    t.belongs_to :commentable, :polymorphic => true
+  end
 end
