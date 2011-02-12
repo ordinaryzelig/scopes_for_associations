@@ -26,7 +26,10 @@ module ScopesForAssociations
   def define_scopes_for_polymorpic_belongs_to_associations
     polymorphic_belongs_to_reflections.each do |reflection|
       name = reflection.name
-      scope :"for_#{name}", proc { |obj| where(:"#{name}_type" => obj.class.name, :"#{name}_id" => obj.id) }
+      attribute_name_for_polymorphic_type = :"#{name}_type"
+      scope_name_for_polymorphic_type = :"for_#{attribute_name_for_polymorphic_type}"
+      scope scope_name_for_polymorphic_type, proc { |string| where(attribute_name_for_polymorphic_type => string) }
+      scope :"for_#{name}", proc { |obj| send(scope_name_for_polymorphic_type, obj.class.name).where(:"#{name}_id" => obj.id) }
     end
   end
 
@@ -48,7 +51,7 @@ module ScopesForAssociations
         if reflection
           send(:"for_#{reflection.options[:as]}", object)
         else
-          raise "no scope for #{object.class}"
+          raise "No scope for #{object.class}. If the associaton is polymorphic, make sure #{object.class} defines something like 'has_many :#{self.name.underscore.pluralize}, :as => :#{self.name.underscore + 'able'}'."
         end
       end
     }

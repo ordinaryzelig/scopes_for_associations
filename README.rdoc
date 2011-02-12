@@ -46,9 +46,11 @@ The examples here are basically reproductions of the tests.
     belongs_to :commentable, :polymorphic => true
   end
 
-  Commentable.for_movie(Movie.first)
+  Comment.for_commentable_type('Movie')
   #=> [#<Comment ..., commentable_type: "Movie", commentable_id: 1>]
-  Commentable.for(Movie.first)
+  Comment.for_commentable(movie)
+  #=> [#<Comment ..., commentable_type: "Movie", commentable_id: 1>]
+  Comment.for(Movie.first)
   #=> [#<Comment ..., commentable_type: "Movie", commentable_id: 1>]
 
 == Installation
