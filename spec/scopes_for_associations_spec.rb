@@ -15,22 +15,33 @@ describe ScopesForAssociations do
 
   context 'for non-polymorphic belongs_to associations' do
 
-    it 'should define for_x scopes' do
-      Movie.should respond_to(:for_director)
-      Movie.should respond_to(:for_production_company)
+    it 'should define useful scopes' do
+      Movie.should define_scopes(
+        :for_director_id,
+        :for_director,
+        :for_production_company_id,
+        :for_production_company,
+        :for
+      )
+    end
+
+    it 'should scope for association id' do
+      Movie.for_director_id(director.id).should query_the_same_as(Movie.where(:director_id => director.id))
+      Movie.for_production_company_id(production_company.id).should query_the_same_as(Movie.where(:production_company_id => production_company.id))
     end
 
     it 'should scope for association as object' do
-      Movie.for_director(director).to_sql.should eq(Movie.where(:director_id => director.id).to_sql)
-      Movie.for_director(director).should eq([movie])
-      Movie.for_production_company(production_company).to_sql.should eq(Movie.where(:production_company_id => production_company.id).to_sql)
-      Movie.for_production_company(director).should eq([movie])
+      Movie.for_director(director).should query_the_same_as(Movie.for_director_id(director.id))
+      Movie.for_production_company(production_company).should query_the_same_as(Movie.for_production_company_id(production_company.id))
     end
 
     it 'should have an all encompassing scope :for' do
-      Movie.for(director).to_sql.should eq(Movie.for_director(director).to_sql)
+      Movie.for(director).should query_the_same_as(Movie.for_director(director))
+      Movie.for(production_company).should query_the_same_as(Movie.for_production_company(production_company))
+    end
+
+    it 'should return correct results' do
       Movie.for(director).should eq([movie])
-      Movie.for(production_company).to_sql.should eq(Movie.for_production_company(production_company).to_sql)
       Movie.for(production_company).should eq([movie])
     end
 
@@ -38,27 +49,36 @@ describe ScopesForAssociations do
 
   context 'for polymorphic belongs_to associations' do
 
-    it 'should define for_x scopes' do
-      Comment.should respond_to(:for_commentable)
-      Comment.should respond_to(:for_commentable_type)
-      Comment.should respond_to(:for)
+    it 'should define uesful scopes' do
+      Comment.should define_scopes(
+        :for_commentable_id,
+        :for_commentable_type,
+        :for_commentable,
+        :for
+      )
+    end
+
+    it 'should scope for polymorphic id' do
+      Comment.for_commentable_type('Movie').should query_the_same_as(Comment.where(:commentable_type => 'Movie'))
     end
 
     it 'should scope for polymorphic type' do
-      Comment.for_commentable_type('Movie').to_sql.should eq(Comment.where(:commentable_type => 'Movie').to_sql)
-      Comment.for_commentable_type('Movie').should eq([movie_comment])
+      Comment.for_commentable_id(movie.id).should query_the_same_as(Comment.where(:commentable_id => movie.id))
     end
 
     it 'should scope for association as object' do
-      Comment.for_commentable(movie).to_sql.should eq(Comment.where(:commentable_type => 'Movie', :commentable_id => movie.id).to_sql)
-      Comment.for_commentable(movie).should eq([movie_comment])
-      Comment.for_commentable(trailer).to_sql.should eq(Comment.where(:commentable_type => 'Trailer', :commentable_id => trailer.id).to_sql)
-      Comment.for_commentable(trailer).should eq([trailer_comment])
+      Comment.for_commentable(movie).should query_the_same_as(Comment.where(:commentable_type => 'Movie', :commentable_id => movie.id))
+      Comment.for_commentable(trailer).should query_the_same_as(Comment.where(:commentable_type => 'Trailer', :commentable_id => trailer.id))
     end
 
     it 'should have an all encompassing scope :for' do
-      Comment.for(movie).to_sql.should eq(Comment.for_commentable(movie).to_sql)
-      Comment.for(trailer).to_sql.should eq(Comment.for_commentable(trailer).to_sql)
+      Comment.for(movie).should query_the_same_as(Comment.for_commentable(movie))
+      Comment.for(trailer).should query_the_same_as(Comment.for_commentable(trailer))
+    end
+
+    it 'should return correct results' do
+      Comment.for(movie).should eq([movie_comment])
+      Comment.for(trailer).should eq([trailer_comment])
     end
 
   end

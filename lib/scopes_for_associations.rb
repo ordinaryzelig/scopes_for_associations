@@ -19,7 +19,10 @@ module ScopesForAssociations
   def define_scopes_for_non_polymorpic_belongs_to_associations
     non_polymorphic_belongs_to_reflections.each do |reflection|
       name = reflection.name
-      scope :"for_#{name}", proc { |obj| where(:"#{name}_id" => obj.id) }
+      attribute_name = :"#{name}_id"
+      scope_name_for_attribute_id = :"for_#{attribute_name}"
+      scope scope_name_for_attribute_id, proc { |id| where(attribute_name => id) }
+      scope :"for_#{name}", proc { |obj| send(scope_name_for_attribute_id, obj.id) }
     end
   end
 
@@ -27,7 +30,10 @@ module ScopesForAssociations
     polymorphic_belongs_to_reflections.each do |reflection|
       name = reflection.name
       attribute_name_for_polymorphic_type = :"#{name}_type"
+      attribute_name_for_polymorphic_id = :"#{name}_id"
+      scope_name_for_polymorphic_id = :"for_#{attribute_name_for_polymorphic_id}"
       scope_name_for_polymorphic_type = :"for_#{attribute_name_for_polymorphic_type}"
+      scope scope_name_for_polymorphic_id, proc { |id| where(attribute_name_for_polymorphic_id => id) }
       scope scope_name_for_polymorphic_type, proc { |string| where(attribute_name_for_polymorphic_type => string) }
       scope :"for_#{name}", proc { |obj| send(scope_name_for_polymorphic_type, obj.class.name).where(:"#{name}_id" => obj.id) }
     end
