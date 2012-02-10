@@ -1,4 +1,6 @@
-= Scopes for Associations [![Build Status](https://secure.travis-ci.org/ordinaryzelig/fandango.png?branch=master)](http://travis-ci.org/ordinaryzelig/fandango)
+= Scopes for Associations
+
+https://secure.travis-ci.org/ordinaryzelig/scopes_for_associations.png
 
 https://github.com/ordinaryzelig/scopes_for_associations
 
