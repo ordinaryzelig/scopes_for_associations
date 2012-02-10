@@ -1,5 +1,4 @@
 require 'pathname'
-require 'active_record'
 require 'awesome_print'
 
 require File.join(Pathname(__FILE__).dirname.expand_path, '../lib/scopes_for_associations')

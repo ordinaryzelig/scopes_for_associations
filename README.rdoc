@@ -1,4 +1,6 @@
-= Scopes for Associations
+= Scopes for Associations [![Build Status](https://secure.travis-ci.org/ordinaryzelig/fandango.png?branch=master)](http://travis-ci.org/ordinaryzelig/fandango)
+
+https://github.com/ordinaryzelig/scopes_for_associations
 
 == Description
 
@@ -66,5 +68,3 @@ The examples here are basically reproductions of the tests.
 == Compatibility
 
 works with ActiveRecord >=3.0.0
-
-gem-testers: http://gem-testers.org/gems/scopes_for_associations

@@ -5,9 +5,6 @@ describe ScopesForAssociations do
   let(:director) { Director.create! }
   let(:production_company) { ProductionCompany.create! }
   let(:movie) { Movie.create!(:director => director, :production_company => production_company) }
-  let(:trailer) { Trailer.create!(:director => director, :production_company => production_company, :movie => movie) }
-  let(:movie_comment) { Comment.create! :commentable_type => 'Movie', :commentable_id => movie.id }
-  let(:trailer_comment) { Comment.create! :commentable_type => 'Trailer', :commentable_id => trailer.id }
 
   it 'should be included in ActiveRecord::Base' do
     ActiveRecord::Base.should respond_to(:scopes_for_associations)
@@ -48,6 +45,10 @@ describe ScopesForAssociations do
   end
 
   context 'for polymorphic belongs_to associations' do
+
+    let(:trailer) { Trailer.create!(:movie => movie) }
+    let(:movie_comment) { Comment.create! :commentable_type => 'Movie', :commentable_id => movie.id }
+    let(:trailer_comment) { Comment.create! :commentable_type => 'Trailer', :commentable_id => trailer.id }
 
     it 'should define uesful scopes' do
       Comment.should define_scopes(

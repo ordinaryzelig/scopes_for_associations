@@ -23,5 +23,5 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'awesome_print'
   s.add_development_dependency 'rspec', '2.5.0'
-  s.add_development_dependency 'sqlite3-ruby', '1.2.5'
+  s.add_development_dependency 'sqlite3', '1.3.5'
 end

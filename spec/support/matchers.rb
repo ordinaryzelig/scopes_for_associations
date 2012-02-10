@@ -1,7 +1,7 @@
 RSpec::Matchers.define :define_scopes do |*scopes|
   match do |model_class|
     scopes.each do |scope|
-      model_class.scopes.keys.should include(scope)
+      model_class.respond_to? scope
     end
   end
 end

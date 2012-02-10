@@ -1,3 +1,5 @@
+require 'active_record'
+
 module ScopesForAssociations
 
   def scopes_for_associations()

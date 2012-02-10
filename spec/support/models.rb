@@ -14,8 +14,6 @@ end
 
 class Trailer < ActiveRecord::Base
   belongs_to :movie
-  belongs_to :director
-  belongs_to :production_company
   has_many :comments, :as => :commentable
   scopes_for_associations
 end
