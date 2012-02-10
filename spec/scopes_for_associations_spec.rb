@@ -68,8 +68,10 @@ describe ScopesForAssociations do
     end
 
     it 'should scope for association as object' do
-      Comment.for_commentable(movie).should query_the_same_as(Comment.where(:commentable_type => 'Movie', :commentable_id => movie.id))
-      Comment.for_commentable(trailer).should query_the_same_as(Comment.where(:commentable_type => 'Trailer', :commentable_id => trailer.id))
+      # The order of the expected where statements is necessary for some reason.
+      # This came up when I used bundle exec rake, but did not fail when I used rake alone. Go figure.
+      Comment.for_commentable(movie).should   query_the_same_as(Comment.where(:commentable_type => 'Movie').where(:commentable_id => movie.id))
+      Comment.for_commentable(trailer).should query_the_same_as(Comment.where(:commentable_type => 'Trailer').where(:commentable_id => trailer.id))
     end
 
     it 'should have an all encompassing scope :for' do
